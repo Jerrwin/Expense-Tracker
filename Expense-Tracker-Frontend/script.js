@@ -38,7 +38,7 @@ function updateValues() {
 function addTransactionDOM(transaction) {
   const tr = document.createElement("tr");
   tr.innerHTML = `
-    <td>${transaction.date}</td>
+    <td>${formatDate(transaction.date)}</td>
     <td>${transaction.text}</td>
     <td class="amount ${
       transaction.amount < 0 ? "expense" : ""
@@ -49,14 +49,20 @@ function addTransactionDOM(transaction) {
 }
 
 function removeTransaction(id) {
-  fetch(`http://localhost:8080/ExpTrack/transactions/${username}/${id}`, {
-    method: "DELETE",
-  })
-    .then(() => {
-      transactions = transactions.filter((t) => t.id !== id);
-      updateUI();
+  const confirmed = confirm(
+    "Are you sure you want to delete this transaction?"
+  );
+
+  if (confirmed) {
+    fetch(`http://localhost:8080/ExpTrack/transactions/${username}/${id}`, {
+      method: "DELETE",
     })
-    .catch((err) => console.error("Delete failed", err));
+      .then(() => {
+        transactions = transactions.filter((t) => t.id !== id);
+        updateUI();
+      })
+      .catch((err) => console.error("Delete failed", err));
+  }
 }
 
 function updateUI() {
@@ -108,3 +114,14 @@ function init() {
 }
 
 init();
+
+function formatDate(isoDate) {
+  const date = new Date(isoDate);
+
+  // Get day, month, and year
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+
+  return `${day}-${month}-${year}`;
+}
