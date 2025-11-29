@@ -49,29 +49,28 @@
 <body>
   <div class="container">
     <h1>Login</h1>
-    <div class="form">
+    <form class="form" id="login-form">
       <div class="form-control">
         <label for="username">Username</label>
-        <input type="text" id="username" placeholder="Enter your username">
+        <input type="text" id="username" placeholder="Enter your username" autocomplete="username">
       </div>
       <div class="form-control">
         <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter your password">
+        <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password">
       </div>
-      <button type="button" class="btn" id="login-btn">Login</button>
+      <button type="submit" class="btn" id="login-btn">Login</button>
       <a href="register.html" class="register-link">Don't have an account? Register</a>
-    </div>
+    </form>
   </div>
 
   <script>
-
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
       // If logged in
       window.location.href = "expense_tracker.html"; // redirected
     }
 
-    document.getElementById('login-btn').addEventListener('click', async (event) => {
+    document.getElementById('login-form').addEventListener('submit', async (event) => {
       event.preventDefault();
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value.trim();
